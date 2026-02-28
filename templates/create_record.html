@@ -5,6 +5,7 @@
     <div class="card-header bg-success text-white">
         Create Record for: {{ entity[0] }}
     </div>
+
     <div class="card-body">
 
         {% if error %}
@@ -16,28 +17,50 @@
         <form method="POST">
 
             {% for attr in attributes %}
-            <div class="mb-3">
-                <label class="form-label">
-                    {{ attr[1] }} ({{ attr[2] }})
-                </label>
 
-                {% if attr[2] == "boolean" %}
-                    <select name="{{ attr[0] }}" class="form-select">
-                        <option value="true">True</option>
-                        <option value="false">False</option>
-                    </select>
+                {% if not attr[3] %}  <!-- NOT calculated -->
 
-                {% elif attr[2] == "date" %}
-                    <input type="date"
-                           name="{{ attr[0] }}"
-                           class="form-control">
+                    <div class="mb-3">
+                        <label class="form-label">{{ attr[1] }}</label>
 
-                {% else %}
-                    <input type="text"
-                           name="{{ attr[0] }}"
-                           class="form-control">
+                        {% if attr[2] == "integer" %}
+                            <input type="number"
+                                   name="{{ attr[0] }}"
+                                   class="form-control"
+                                   required>
+
+                        {% elif attr[2] == "float" %}
+                            <input type="number"
+                                   step="any"
+                                   name="{{ attr[0] }}"
+                                   class="form-control"
+                                   required>
+
+                        {% elif attr[2] == "boolean" %}
+                            <select name="{{ attr[0] }}"
+                                    class="form-select"
+                                    required>
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                            </select>
+
+                        {% elif attr[2] == "date" %}
+                            <input type="date"
+                                   name="{{ attr[0] }}"
+                                   class="form-control"
+                                   required>
+
+                        {% else %}
+                            <input type="text"
+                                   name="{{ attr[0] }}"
+                                   class="form-control"
+                                   required>
+                        {% endif %}
+
+                    </div>
+
                 {% endif %}
-            </div>
+
             {% endfor %}
 
             <button type="submit" class="btn btn-primary">
@@ -45,10 +68,6 @@
             </button>
 
         </form>
-
-        <a href="/attributes/{{ entity_type_id }}" class="btn btn-secondary mt-3">
-            Back
-        </a>
 
     </div>
 </div>

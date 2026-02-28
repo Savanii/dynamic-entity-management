@@ -8,28 +8,44 @@
     <div class="card-body">
 
         <form method="POST">
-            <div class="mb-3">
-                <input type="text"
-                       name="name"
-                       class="form-control"
-                       placeholder="Field Name (e.g., weight)"
-                       required>
-            </div>
+    <div class="mb-3">
+        <input type="text"
+               name="name"
+               class="form-control"
+               placeholder="Field Name"
+               required>
+    </div>
 
-            <div class="mb-3">
-                <select name="data_type" class="form-select" required>
-                    <option value="string">String</option>
-                    <option value="integer">Integer</option>
-                    <option value="float">Float</option>
-                    <option value="boolean">Boolean</option>
-                    <option value="date">Date</option>
-                </select>
-            </div>
+    <div class="mb-3">
+        <select name="data_type" class="form-select" required>
+            <option value="string">String</option>
+            <option value="integer">Integer</option>
+            <option value="float">Float</option>
+            <option value="float">Number</option>
+        </select>
+    </div>
 
-            <button type="submit" class="btn btn-primary">
-                Add Attribute
-            </button>
-        </form>
+    <div class="form-check mb-3">
+        <input class="form-check-input"
+               type="checkbox"
+               name="is_calculated"
+               id="isCalculated">
+        <label class="form-check-label" for="isCalculated">
+            Calculated Field
+        </label>
+    </div>
+
+    <div class="mb-3">
+        <input type="text"
+               name="formula"
+               class="form-control"
+               placeholder="Formula (example: length * width)">
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Add Attribute
+    </button>
+</form>
 
         <div class="mt-4 d-flex gap-2">
             <a href="/records/{{ entity_type_id }}" class="btn btn-success">

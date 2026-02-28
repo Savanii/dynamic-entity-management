@@ -5,68 +5,94 @@
     <div class="card-header bg-info text-white">
         Records for: {{ entity[0] }}
     </div>
+
     <div class="card-body">
 
-        <!-- FILTER FORM -->
-        <form method="POST" action="/records-list/{{ entity_type_id }}" class="row g-3 mb-4">
+        <a href="/records/{{ entity_type_id }}"
+           class="btn btn-success mb-3">
+            Create New Record
+        </a>
+
+        <!-- 🔥 Manual Dynamic Filter -->
+        <form method="POST" class="row g-3 mb-4">
 
             <div class="col-md-3">
-                <select name="attribute_id" class="form-select">
+                <select name="attribute_id" class="form-select" required>
+                    <option value="">Select Attribute</option>
                     {% for attr in attributes %}
-                    <option value="{{ attr[0] }}">{{ attr[1] }}</option>
+                        <option value="{{ attr[0] }}">
+                            {{ attr[1] }}
+                        </option>
                     {% endfor %}
                 </select>
             </div>
 
             <div class="col-md-2">
-                <select name="operator" class="form-select">
+                <select name="operator" class="form-select" required>
                     <option value="=">=</option>
                     <option value=">">></option>
                     <option value="<"><</option>
+                    <option value=">=">>=</option>
+                    <option value="<="><=</option>
                     <option value="LIKE">LIKE</option>
                 </select>
             </div>
 
             <div class="col-md-3">
-                <input type="text" name="value"
+                <input type="text"
+                       name="value"
                        class="form-control"
                        placeholder="Enter value"
                        required>
             </div>
 
             <div class="col-md-2">
-                <button type="submit" class="btn btn-primary">
+                <button type="submit"
+                        class="btn btn-primary">
                     Filter
                 </button>
             </div>
 
         </form>
 
-        <a href="/records/{{ entity_type_id }}" class="btn btn-success mb-3">
-            Create New Record
-        </a>
-
         {% if records %}
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-striped">
+
             <thead class="table-dark">
                 <tr>
-                    <th style="width:80px;">ID</th>
+                    <th>ID</th>
                     {% for attr in attributes %}
-                    <th>{{ attr[1] }}</th>
+                        <th>{{ attr[1] }}</th>
                     {% endfor %}
+                    <th>Action</th>
                 </tr>
             </thead>
+
             <tbody>
                 {% for entity_id, values in records.items() %}
                 <tr>
                     <td>{{ entity_id }}</td>
 
                     {% for attr in attributes %}
-                    <td>{{ values.get(attr[1], '') }}</td>
+                        <td>{{ values.get(attr[1], '') }}</td>
                     {% endfor %}
+
+                    <td>
+                        <a href="/edit-record/{{ entity_id }}/{{ entity_type_id }}"
+                           class="btn btn-warning btn-sm">
+                            Edit
+                        </a>
+
+                        <a href="/delete-record/{{ entity_id }}/{{ entity_type_id }}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Delete this record?')">
+                            Delete
+                        </a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
+
         </table>
         {% else %}
         <div class="alert alert-info">
@@ -74,7 +100,8 @@
         </div>
         {% endif %}
 
-        <a href="/attributes/{{ entity_type_id }}" class="btn btn-secondary mt-3">
+        <a href="/attributes/{{ entity_type_id }}"
+           class="btn btn-secondary mt-3">
             Back
         </a>
 
