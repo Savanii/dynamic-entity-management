@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        Create Entity Type
+    </div>
+    <div class="card-body">
+
+        {% if error %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            <div class="mb-3">
+                <input type="text"
+                       name="name"
+                       class="form-control"
+                       placeholder="Enter Entity Type Name (e.g., Product)"
+                       required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Add Entity Type
+            </button>
+        </form>
+
+    </div>
+</div>
+
+
+<div class="card shadow-sm">
+    <div class="card-header bg-secondary text-white">
+        Existing Entity Types
+    </div>
+    <div class="card-body">
+
+        {% if types %}
+        <table id="entityTable" class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width:80px;">ID</th>
+                    <th>Name</th>
+                    <th style="width:120px;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for type in types %}
+                <tr>
+                    <td>{{ type[0] }}</td>
+                    <td>
+                        <a href="/attributes/{{ type[0] }}">
+                            {{ type[1] }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/delete-entity-type/{{ type[0] }}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Delete this entity type?')">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-info">
+            No entity types created yet.
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<!-- DataTable Initialization -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    $('#entityTable').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 25, 50],
+        searching: true,
+        ordering: true
+    });
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-secondary text-white">
+        Manage Attributes for: {{ entity[0] }}
+    </div>
+    <div class="card-body">
+
+        <form method="POST">
+            <div class="mb-3">
+                <input type="text"
+                       name="name"
+                       class="form-control"
+                       placeholder="Field Name (e.g., weight)"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <select name="data_type" class="form-select" required>
+                    <option value="string">String</option>
+                    <option value="integer">Integer</option>
+                    <option value="float">Float</option>
+                    <option value="boolean">Boolean</option>
+                    <option value="date">Date</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Add Attribute
+            </button>
+        </form>
+
+        <div class="mt-4 d-flex gap-2">
+            <a href="/records/{{ entity_type_id }}" class="btn btn-success">
+                Create New Record
+            </a>
+
+            <a href="/records-list/{{ entity_type_id }}" class="btn btn-info">
+                View Records
+            </a>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="card shadow-sm">
+    <div class="card-header bg-dark text-white">
+        Existing Attributes
+    </div>
+    <div class="card-body">
+
+        {% if attributes %}
+        <table id="attributesTable" class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width:80px;">ID</th>
+                    <th>Name</th>
+                    <th>Data Type</th>
+                    <th style="width:120px;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for attr in attributes %}
+                <tr>
+                    <td>{{ attr[0] }}</td>
+                    <td>{{ attr[1] }}</td>
+                    <td>{{ attr[2] }}</td>
+                    <td>
+                        <a href="/delete-attribute/{{ attr[0] }}/{{ entity_type_id }}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Delete this attribute?')">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-info">
+            No attributes defined yet.
+        </div>
+        {% endif %}
+
+        <a href="/entity-types" class="btn btn-secondary mt-3">
+            Back
+        </a>
+
+    </div>
+</div>
+
+<!-- DataTable Initialization -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    $('#attributesTable').DataTable({
+        pageLength: 5,
+        lengthMenu: [5, 10, 25, 50],
+        searching: true,
+        ordering: true
+    });
+});
+</script>
+
+{% endblock %}

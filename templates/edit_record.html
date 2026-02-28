@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-warning">
+        Edit Record for: {{ entity[0] }}
+    </div>
+    <div class="card-body">
+
+        <form method="POST">
+            {% for attr in attributes %}
+            <div class="mb-3">
+                <label class="form-label">
+                    {{ attr[1] }} ({{ attr[2] }})
+                </label>
+
+                {% if attr[2] == "boolean" %}
+                    <select name="{{ attr[0] }}" class="form-select">
+                        <option value="true"
+                            {% if values.get(attr[0]) == "true" %}selected{% endif %}>
+                            True
+                        </option>
+                        <option value="false"
+                            {% if values.get(attr[0]) == "false" %}selected{% endif %}>
+                            False
+                        </option>
+                    </select>
+
+                {% elif attr[2] == "date" %}
+                    <input type="date"
+                           name="{{ attr[0] }}"
+                           value="{{ values.get(attr[0], '') }}"
+                           class="form-control">
+
+                {% else %}
+                    <input type="text"
+                           name="{{ attr[0] }}"
+                           value="{{ values.get(attr[0], '') }}"
+                           class="form-control">
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary">
+                Update Record
+            </button>
+        </form>
+
+        <a href="/records-list/{{ entity_type_id }}" class="btn btn-secondary mt-3">
+            Back
+        </a>
+    </div>
+</div>
+
+{% endblock %}
